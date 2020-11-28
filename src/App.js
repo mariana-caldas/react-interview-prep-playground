@@ -1,36 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Counter from './components/Counter';
 import './App.css';
-import axios from 'axios';
-
-//https://randomuser.me/api
-
-//why VS suggests to make this function async?
-const fetchData = async () => {
-  try {
-    const response = await axios.get('https://randomuser.me/api');
-    // handle success
-    console.log(response);
-    return response;
-  } catch (error) {
-    // handle error
-    console.log(error);
-  }
-}
+import fetchData from './api';
 
 function App() {
   const [count, setCount] = useState(0);
   const [userInfos, setUserInfos] = useState([]);
-  const [randomUserDataJSON, setRandomUserDataJSON] = useState('');
+  const [randomUserDataJSON, setRandomUserDataJSON] = useState();
 
-  //Why then is here and not inside fetchData function above?
   useEffect(() => {
     fetchData().then(response => {
-      setRandomUserDataJSON(JSON.stringify(response) || 'No user found');
+      setRandomUserDataJSON(JSON.stringify(response));
       setUserInfos(response.data.results);
     });
   }, []);
-
 
   return (
     <div className="App">
@@ -47,7 +30,7 @@ function App() {
             console.log("User: ", user);
             return <div key={index}>
               <p>{`${user.name.first} ${user.name.last}`}</p>
-              <img src={user.picture.thumbnail} />
+              <img src={user.picture.thumbnail} alt="User" />
             </div>
 
           })
@@ -59,7 +42,5 @@ function App() {
     </div>
   );
 }
-
-
 
 export default App;
