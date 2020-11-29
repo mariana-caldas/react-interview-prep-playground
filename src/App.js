@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Counter from './components/Counter';
-import './App.css';
 import fetchData from './api';
+import Counter from './components/Counter';
+import User from './components/User'
+import './App.css';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,6 +16,10 @@ function App() {
     });
   }, []);
 
+  const userData = userInfos.map((user, index) => {
+    return <User key={index} fetchData={fetchData} userFirstName={user.name.first} userLastName={user.name.last} userPicture={user.picture.thumbnail} />
+  })
+
   return (
     <div className="App">
       <header className="App-header">
@@ -23,18 +28,7 @@ function App() {
       <main>
         <Counter count={count} setCount={setCount} />
         <br />
-        <h2>Fetching an API data with useEffect()</h2>
-        <button onClick={() => { fetchData(); }}>Fetch Data</button>
-        {
-          userInfos.map((user, index) => {
-            console.log("User: ", user);
-            return <div key={index}>
-              <p>{`${user.name.first} ${user.name.last}`}</p>
-              <img src={user.picture.thumbnail} alt="User" />
-            </div>
-
-          })
-        }
+        {userData}
         <pre style={{ textAlign: "left" }}>
           {randomUserDataJSON}
         </pre>
