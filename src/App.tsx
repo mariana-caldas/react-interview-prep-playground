@@ -4,18 +4,24 @@ import Counter from "./components/Counter";
 import User from "./components/User";
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
-  const [nextPageNumber, setNextPageNumber] = useState(1);
-  const [userInfos, setUserInfos] = useState([]);
-  // const [randomUserDataJSON, setRandomUserDataJSON] = useState();
+interface UserData {
+  name: { first: string, last: string };
+  picture: {
+    thumbnail: string;
+  }
+}
 
-  const fetchNextUser = () => {
+function App(): JSX.Element {
+  const [count, setCount] = useState<number>(0);
+  const [nextPageNumber, setNextPageNumber] = useState<number>(1);
+  const [userDataArr, setUserDataArr] = useState<UserData[]>([]);
+
+  const fetchNextUser = (): void => {
     fetchData(nextPageNumber).then((response) => {
-      // setRandomUserDataJSON(JSON.stringify(response));
+      if (!response) return;
       if (response.data === undefined) return;
-      const newUserInfos = [...userInfos, ...response.data.results];
-      setUserInfos(newUserInfos);
+      const newUserData = [...userDataArr, ...response.data.results];
+      setUserDataArr(newUserData);
       setNextPageNumber(response.data.info.page + 1);
     });
   };
@@ -25,13 +31,13 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const userData = userInfos.map((user, index) => {
+  const userDataRendered = userDataArr.map((user, index: number) => {
     return (
       <User
         key={index}
-        userFirstName={user.name.first}
-        userLastName={user.name.last}
-        userPicture={user.picture.thumbnail}
+        firstName={user.name.first}
+        lastName={user.name.last}
+        picture={user.picture.thumbnail}
       />
     );
   });
@@ -47,12 +53,12 @@ function App() {
         <h2>Fetching an API data with useEffect()</h2>
         <button
           onClick={() => {
-            fetchData();
+            fetchData(nextPageNumber);
           }}
         >
           Fetch Data
         </button>
-        {userData}
+        {userDataRendered}
         {/* <pre style={{ textAlign: "left" }}>
           {randomUserDataJSON}
         </pre> */}
