@@ -1,6 +1,12 @@
 import React from 'react';
 
-export default function Counter({ count, setCount }) {
+export interface CounterProps {
+    count: number;
+    setCount: React.Dispatch<React.SetStateAction<number>>;
+}
+
+
+const Counter: React.FC<CounterProps> = ({ count, setCount }) => {
     return (
         <div className="counter">
             <h2>Creating a counter with useState():</h2>
@@ -18,3 +24,5 @@ export default function Counter({ count, setCount }) {
 
     );
 }
+
+export default Counter;
