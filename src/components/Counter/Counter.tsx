@@ -6,7 +6,7 @@ export interface CounterProps {
 }
 
 
-const Counter: React.FC<CounterProps> = ({ count, setCount }) => {
+const Counter = ({ count, setCount }: CounterProps) => {
     return (
         <div className="counter">
             <h2>Creating a counter with useState():</h2>
