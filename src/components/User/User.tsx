@@ -6,7 +6,7 @@ export interface UserProps {
     picture: string;
 }
 
-const User: React.FC<UserProps> = ({ firstName, lastName, picture }) => {
+const User = ({ firstName, lastName, picture }: UserProps) => {
     return (
         <div>
             <p>{`${firstName} ${lastName}`}</p>
